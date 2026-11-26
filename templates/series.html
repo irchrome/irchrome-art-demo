@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — Research Archives · {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ page.title }} — {{ config.title }}{% endblock %}
+{% block og_description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_image %}
+  {% if page.extra.cover %}
+  <meta property="og:image" content="{{ get_url(path=page.extra.cover.src_lg) }}">
+  {% else %}
+  <meta property="og:image" content="{{ get_url(path=config.extra.hero_image_lg) }}">
+  {% endif %}
+{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": "{{ page.title }}",
+  "description": "{{ page.description | default(value=config.description) }}",
+  "url": "{{ page.permalink | safe }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ config.extra.author_name }}"
+  }{% if page.extra.cover %},
+  "image": {
+    "@type": "ImageObject",
+    "contentUrl": "{{ get_url(path=page.extra.cover.src_lg) }}",
+    "width": {{ page.extra.cover.width }},
+    "height": {{ page.extra.cover.height }},
+    "caption": "{{ page.extra.cover.alt | replace(from='"', to='\"') }}"
+  }{% endif %}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article>
+  {% if page.extra.cover %}
+  <div class="series-hero">
+    <div class="series-hero__media">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="{{ get_url(path=page.extra.cover.webp_sm) }} 720w, {{ get_url(path=page.extra.cover.webp_md) }} 1200w"
+          sizes="100vw">
+        <img
+          src="{{ get_url(path=page.extra.cover.src_lg) }}"
+          width="{{ page.extra.cover.width }}"
+          height="{{ page.extra.cover.height }}"
+          alt="{{ page.extra.cover.alt }}"
+          fetchpriority="high"
+          decoding="async">
+      </picture>
+    </div>
+  </div>
+  {% endif %}
+
+  <header class="container series-hero__header">
+    <p class="eyebrow">
+      <a href="{{ get_url(path='research-archives/') }}">Research Archives</a>
+      {% if page.extra.eyebrow %} · {{ page.extra.eyebrow }}{% endif %}
+    </p>
+    <h1 class="page-header__title">{{ page.title }}</h1>
+    {% if page.extra.subtitle %}
+    <p class="eyebrow eyebrow--accent" style="margin-top: 0.75rem;">{{ page.extra.subtitle }}</p>
+    {% endif %}
+    {% if page.description %}
+    <p class="page-header__lead">{{ page.description }}</p>
+    {% endif %}
+
+    <div class="series-meta-bar">
+      {% if page.extra.location %}<span>{{ page.extra.location }}</span>{% endif %}
+      {% if page.extra.period %}<span>{{ page.extra.period }}</span>{% endif %}
+      {% if page.extra.technique %}<span>{{ page.extra.technique }}</span>{% endif %}
+      {% if page.extra.plate_count %}<span>{{ page.extra.plate_count }} plates</span>{% endif %}
+    </div>
+  </header>
+
+  {% if page.content %}
+  <section class="container" aria-label="Series essay">
+    <div class="prose">
+      {{ page.content | safe }}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if page.extra.sections %}
+  <div class="container">
+    {% for grp in page.extra.sections %}
+    <section class="series-section" aria-label="{{ grp.heading | default(value='Plates') }}">
+      {% if grp.heading %}
+      <h2 class="series-section__heading">{{ grp.heading }}</h2>
+      {% endif %}
+      {% if grp.paragraphs %}
+      <div class="prose series-section__intro">
+        {% for para in grp.paragraphs %}
+        <p>{{ para }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if grp.plates %}
+      {% set count = grp.plates | length %}
+      <div class="plate-grid{% if count >= 3 %} plate-grid--multi{% elif count == 2 %} plate-grid--multi{% endif %}">
+        {% for plate in grp.plates %}
+        <figure class="plate">
+          <a
+            class="plate__link"
+            href="{{ get_url(path=plate.src_lg) }}"
+            data-lightbox="series"
+            data-alt="{{ plate.alt }}"
+            {% if plate.caption %}data-caption="{{ plate.caption }}"{% endif %}>
+            <picture>
+              <source
+                type="image/webp"
+                srcset="{{ get_url(path=plate.webp_sm) }} 720w, {{ get_url(path=plate.webp_md) }} 1200w"
+                sizes="(max-width: 719px) 92vw, 46vw">
+              <img
+                src="{{ get_url(path=plate.src_lg) }}"
+                width="{{ plate.width }}"
+                height="{{ plate.height }}"
+                alt="{{ plate.alt }}"
+                loading="lazy"
+                decoding="async">
+            </picture>
+          </a>
+          {% if plate.caption %}
+          <figcaption class="plate__caption">{{ plate.caption }}</figcaption>
+          {% endif %}
+        </figure>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </section>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <nav class="container series-nav" aria-label="Series navigation">
+    <a class="btn btn--ghost" href="{{ get_url(path='research-archives/') }}">← Back to Research Archives</a>
+    <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+      {% if page.higher %}
+      <a class="btn btn--ghost" href="{{ page.higher.permalink | safe }}">← {{ page.higher.title }}</a>
+      {% endif %}
+      {% if page.lower %}
+      <a class="btn btn--ghost" href="{{ page.lower.permalink | safe }}">{{ page.lower.title }} →</a>
+      {% endif %}
+    </div>
+  </nav>
+</article>
+{% endblock %}

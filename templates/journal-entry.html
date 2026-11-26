@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — Field Journal · {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ page.title }} — {{ config.title }}{% endblock %}
+{% block og_description %}{{ page.description | default(value=config.description) }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{ page.title }}",
+  "description": "{{ page.description | default(value=config.description) }}",
+  {% if page.date %}"datePublished": "{{ page.date | date(format='%Y-%m-%d') }}",{% endif %}
+  "author": {
+    "@type": "Person",
+    "name": "{{ config.extra.author_name }}"
+  },
+  "mainEntityOfPage": "{{ page.permalink | safe }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<article class="container">
+  <header class="page-header">
+    <p class="eyebrow">
+      <a href="{{ get_url(path='field-journal/') }}">Field Journal</a>
+      {% if page.date %} · {{ page.date | date(format="%Y-%m-%d") }}{% endif %}
+      {% if page.extra.category %} · {{ page.extra.category }}{% endif %}
+      {% if page.reading_time %} · {{ page.reading_time }} min read{% endif %}
+    </p>
+    <h1 class="page-header__title">{{ page.title }}</h1>
+    {% if page.description %}
+    <p class="page-header__lead">{{ page.description }}</p>
+    {% endif %}
+  </header>
+
+  {% if page.extra.cover %}
+  <figure class="plate" style="margin-bottom: 3rem;">
+    <img
+      src="{{ get_url(path=page.extra.cover.src_lg) }}"
+      {% if page.extra.cover.src_sm %}srcset="{{ get_url(path=page.extra.cover.src_sm) }} 720w, {{ get_url(path=page.extra.cover.src_lg) }} 1600w" sizes="100vw"{% endif %}
+      width="{{ page.extra.cover.width }}"
+      height="{{ page.extra.cover.height }}"
+      alt="{{ page.extra.cover.alt }}"
+      fetchpriority="high"
+      decoding="async">
+    {% if page.extra.cover.caption %}
+    <figcaption class="plate__caption">{{ page.extra.cover.caption }}</figcaption>
+    {% endif %}
+  </figure>
+  {% endif %}
+
+  <div class="prose">
+    {{ page.content | safe }}
+  </div>
+
+  <nav class="series-nav" aria-label="Article navigation">
+    <a class="btn btn--ghost" href="{{ get_url(path='field-journal/') }}">← Back to Field Journal</a>
+  </nav>
+</article>
+{% endblock %}

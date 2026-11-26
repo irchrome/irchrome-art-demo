@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_title %}{{ page.title }} — {{ config.title }}{% endblock %}
+
+{% block content %}
+<header class="container page-header">
+  <p class="eyebrow">Direct Correspondence</p>
+  <h1 class="page-header__title">{{ page.title }}</h1>
+  {% if page.description %}
+  <p class="page-header__lead">{{ page.description }}</p>
+  {% endif %}
+</header>
+
+<section class="container" style="padding-bottom: 4rem;">
+  <div class="panel-grid panel-grid--two">
+    <div class="panel">
+      <div>
+        <p class="eyebrow eyebrow--accent">Email</p>
+        <h2 class="panel__title">Research &amp; Professional Inquiries</h2>
+        <div class="prose" style="margin-top: 1rem;">
+          {{ page.content | safe }}
+        </div>
+        <a class="contact-email" href="mailto:{{ config.extra.contact_email }}">{{ config.extra.contact_email }}</a>
+      </div>
+      <p class="eyebrow">{{ config.extra.author_name }} · {{ config.extra.author_location }}</p>
+    </div>
+
+    <div class="panel">
+      <div>
+        <p class="eyebrow">Verified Public Channels</p>
+        <h2 class="panel__title">Archives, Timelines &amp; Profiles</h2>
+        <ul class="link-list">
+          <li><a href="{{ config.extra.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram (@irchromeart) ↗</a></li>
+          <li><a href="{{ config.extra.telegram_url }}" target="_blank" rel="noopener noreferrer">Telegram (@irchrome) ↗</a></li>
+          <li><a href="{{ config.extra.facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook (@irchromeart) ↗</a></li>
+          <li><a href="{{ config.extra.linkedin_url }}" target="_blank" rel="noopener noreferrer">LinkedIn (in/irchrome) ↗</a></li>
+          <li><a href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Historical Timeline (1910–2025) ↗</a></li>
+          <li><a href="{{ config.extra.chronicle_digital_url }}" target="_blank" rel="noopener noreferrer">Digital Era Timeline ↗</a></li>
+          <li><a href="{{ config.extra.russian_mirror_url }}" target="_blank" rel="noopener noreferrer">Russian Portfolio Site (ru.irchrome.art · Wfolio) ↗</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

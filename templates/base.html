@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ config.description }}{% endblock %}">
+  <meta name="robots" content="{{ config.extra.robots_meta }}">
+  {% block canonical %}
+    {% if current_url %}
+  <link rel="canonical" href="{{ current_url | safe }}">
+    {% endif %}
+  {% endblock %}
+  <link rel="icon" type="image/svg+xml" href="{{ get_url(path='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ get_url(path='css/site.css') }}">
+
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ config.title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ config.description }}{% endblock %}">
+  {% if current_url %}
+  <meta property="og:url" content="{{ current_url | safe }}">
+  {% endif %}
+  {% block og_image %}
+  <meta property="og:image" content="{{ get_url(path=config.extra.hero_image_lg) }}">
+  {% endblock %}
+  <meta name="twitter:card" content="summary_large_image">
+  {% block structured_data %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  {% if config.extra.demo_banner %}
+  <aside class="demo-bar" aria-label="Demo environment notice">
+    <div class="demo-bar__inner">
+      <span>Demo build · Non-indexed preview (noindex, follow)</span>
+      <span>Live site remains at <a href="https://irchrome.art/" rel="noopener noreferrer">irchrome.art</a></span>
+    </div>
+  </aside>
+  {% endif %}
+
+  <header class="site-header">
+    <div class="container site-header__bar">
+      <a class="brand" href="{{ get_url(path='/') }}" aria-label="{{ config.title }} — Home">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">{{ config.title }}</span>
+      </a>
+
+      <nav class="nav-desktop" aria-label="Primary">
+        {% set cur = current_path | default(value="") %}
+        <a href="{{ get_url(path='research-archives/') }}"{% if "/research-archives" in cur %} aria-current="page"{% endif %}>Research Archives</a>
+        <a href="{{ get_url(path='field-journal/') }}"{% if "/field-journal" in cur %} aria-current="page"{% endif %}>Field Journal</a>
+        <a href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Chronicle ↗</a>
+        <a href="{{ get_url(path='about/') }}"{% if "/about" in cur %} aria-current="page"{% endif %}>About</a>
+        <a href="{{ get_url(path='contacts/') }}"{% if "/contacts" in cur %} aria-current="page"{% endif %}>Contacts</a>
+      </nav>
+
+      <details class="nav-mobile">
+        <summary class="nav-mobile__toggle">Menu</summary>
+        <nav class="nav-mobile__panel" aria-label="Mobile navigation">
+          <ul class="nav-mobile__list">
+            <li><a href="{{ get_url(path='/') }}">Home</a></li>
+            <li><a href="{{ get_url(path='research-archives/') }}">Research Archives</a></li>
+            <li><a href="{{ get_url(path='field-journal/') }}">Field Journal</a></li>
+            <li><a href="{{ get_url(path='about/') }}">About</a></li>
+            <li><a href="{{ get_url(path='contacts/') }}">Contacts</a></li>
+            <li class="nav-mobile__sep"><a href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Historical Timeline (1910–2025) ↗</a></li>
+            <li><a href="{{ config.extra.chronicle_digital_url }}" target="_blank" rel="noopener noreferrer">Digital Era Timeline ↗</a></li>
+            <li><a href="{{ config.extra.russian_mirror_url }}" target="_blank" rel="noopener noreferrer">Russian Site (Wfolio) ↗</a></li>
+          </ul>
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__grid">
+      <div class="brand">
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span class="brand__name">{{ config.title }}</span>
+      </div>
+
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="{{ get_url(path='research-archives/') }}">Research Archives</a>
+        <a href="{{ get_url(path='field-journal/') }}">Field Journal</a>
+        <a href="{{ get_url(path='about/') }}">About</a>
+        <a href="{{ get_url(path='contacts/') }}">Contacts</a>
+        <a href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Historical Timeline ↗</a>
+        <a href="{{ config.extra.chronicle_digital_url }}" target="_blank" rel="noopener noreferrer">Digital Era Timeline ↗</a>
+        <a href="{{ config.extra.russian_mirror_url }}" target="_blank" rel="noopener noreferrer">RU Site (Wfolio) ↗</a>
+      </nav>
+
+      <p class="footer-note">© 2026 {{ config.extra.author_name }} · {{ config.extra.author_location }}</p>
+    </div>
+  </footer>
+
+  <script src="{{ get_url(path='js/site.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.title }} — Capturing Ancient and Real Worlds with a Heat Signature{% endblock %}
+{% block description %}Extended-spectrum infrared and IR-Chrome photography by {{ config.extra.author_name }}: research archives, essays, and historical timelines.{% endblock %}
+{% block og_title %}{{ config.title }} — Infrared Photography & Visual Archaeology{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ config.extra.author_name }}",
+  "url": "{{ get_url(path='/') }}",
+  "email": "mailto:{{ config.extra.contact_email }}",
+  "jobTitle": "{{ config.extra.author_role }}",
+  "homeLocation": {
+    "@type": "Place",
+    "name": "{{ config.extra.author_location }}"
+  },
+  "sameAs": [
+    "{{ config.extra.instagram_url }}",
+    "{{ config.extra.telegram_url }}",
+    "{{ config.extra.facebook_url }}",
+    "{{ config.extra.linkedin_url }}",
+    "{{ config.extra.russian_mirror_url }}"
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+{% set archives = get_section(path="research-archives/_index.md") %}
+{% set journal = get_section(path="field-journal/_index.md") %}
+
+<section class="hero" aria-label="Introduction">
+  <div class="hero__media">
+    <picture>
+      <source
+        type="image/webp"
+        srcset="{{ get_url(path=config.extra.hero_image_webp_sm) }} 720w, {{ get_url(path=config.extra.hero_image_webp_md) }} 1200w"
+        sizes="100vw">
+      <img
+        src="{{ get_url(path=config.extra.hero_image_lg) }}"
+        width="{{ config.extra.hero_image_w }}"
+        height="{{ config.extra.hero_image_h }}"
+        alt="{{ config.extra.hero_image_alt }}"
+        fetchpriority="high"
+        decoding="async">
+    </picture>
+  </div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="container hero__content">
+    <p class="eyebrow">Infrared · IR-Chrome · Visual Archaeology</p>
+    <h1 class="hero__title">Framing new world beyond the visible light.</h1>
+    <p class="hero__lead">
+      Extended-spectrum photography by {{ config.extra.author_name }} — infrared photographer, art historian, and visual archaeologist. Full-spectrum cameras, 590nm to 850nm and IR-Chrome filtration, color got right in-camera.
+    </p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="{{ get_url(path='research-archives/') }}">Enter Research Archives</a>
+      <a class="btn btn--ghost" href="{{ get_url(path='field-journal/') }}">Field Journal</a>
+      <a class="btn btn--ghost" href="{{ get_url(path='about/') }}">About</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" aria-label="Primary pathways">
+  <div class="container entry-grid">
+    <a class="entry-card" href="{{ get_url(path='research-archives/') }}">
+      <p class="eyebrow">01 — Archive</p>
+      <h2 class="entry-card__title">Research Archives</h2>
+      <p class="entry-card__body">{{ archives.pages | length }} photographic series across the Levant, Anatolia, the Caucasus, Egypt, Dagestan, and Southeast Asia.</p>
+    </a>
+
+    <a class="entry-card" href="{{ get_url(path='field-journal/') }}">
+      <p class="eyebrow">02 — Writing &amp; Chronology</p>
+      <h2 class="entry-card__title">Field Journal</h2>
+      <p class="entry-card__body">Notes, essays, and gateways to the two PhD timelines of infrared photography (1910–2025 and the digital era).</p>
+    </a>
+
+    <a class="entry-card" href="{{ get_url(path='about/') }}">
+      <p class="eyebrow">03 — Practice</p>
+      <h2 class="entry-card__title">About the Author</h2>
+      <p class="entry-card__body">From student darkrooms and archaeological excavations to full-spectrum optics and visual archaeology.</p>
+    </a>
+  </div>
+</section>
+
+<section class="section rule-top" aria-labelledby="method-heading">
+  <div class="container">
+    <div class="split-header">
+      <div>
+        <p class="eyebrow">Method</p>
+        <h2 id="method-heading" class="section-heading">The IR &amp; Aerochrome turn</h2>
+      </div>
+      <div class="prose">
+        <p>
+          With my camera I propose to see not just documentary fixation of visible signs — but an exploration of energy, stories, and reality that human eyes are simply not built to perceive.
+        </p>
+        <p>
+          I use full-spectrum converted cameras with 590nm, 650nm, 720nm, 850nm, and IR-Chrome filters to obtain the final chromatic register directly in-camera, without post-hoc staging or synthetic color manipulation.
+        </p>
+      </div>
+    </div>
+
+    {% if archives.pages | length > 0 %}
+    <div class="strip-wrap">
+      <div class="strip" role="region" aria-label="Selected series from the Research Archives">
+        {% for item in archives.pages %}
+        <a class="strip__item" href="{{ item.permalink | safe }}">
+          {% if item.extra.cover %}
+          <div class="strip__frame">
+            <picture>
+              <source
+                type="image/webp"
+                srcset="{{ get_url(path=item.extra.cover.webp_sm) }} 720w, {{ get_url(path=item.extra.cover.webp_md) }} 1200w"
+                sizes="(max-width: 767px) 78vw, 31vw">
+              <img
+                src="{{ get_url(path=item.extra.cover.src_lg) }}"
+                width="{{ item.extra.cover.width }}"
+                height="{{ item.extra.cover.height }}"
+                alt="{{ item.extra.cover.alt }}"
+                loading="lazy"
+                decoding="async">
+            </picture>
+          </div>
+          {% endif %}
+          <div class="strip__meta">
+            <h3 class="strip__title">{{ item.title }}</h3>
+            {% if item.extra.plate_count %}
+            <span class="series-card__count">{{ item.extra.plate_count }} plates</span>
+            {% endif %}
+          </div>
+          {% if item.extra.meta_line %}
+          <p class="series-card__meta">{{ item.extra.meta_line }}</p>
+          {% endif %}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section rule-top" aria-labelledby="timelines-heading">
+  <div class="container">
+    <div class="split-header">
+      <div>
+        <p class="eyebrow">PhD Research Infrastructure</p>
+        <h2 id="timelines-heading" class="section-heading">Infrared Chronicles</h2>
+      </div>
+      <div class="prose">
+        <p>
+          Alongside the photographic series, an ongoing doctoral research project maps the history of infrared photography from early silver-halide experiments and military reconnaissance to full-spectrum digital cameras and computational optics.
+        </p>
+      </div>
+    </div>
+
+    <div class="panel-grid panel-grid--two" style="margin-top: 2.5rem;">
+      <article class="panel">
+        <div>
+          <p class="eyebrow eyebrow--accent">Chronicle I · 1910–2025</p>
+          <h3 class="panel__title">Historical Timeline</h3>
+          <p class="panel__body">From Robert Wood’s 1910 infrared photographs and Kodak Aerochrome to contemporary art-and-science practice.</p>
+        </div>
+        <div>
+          <a class="btn btn--ghost" href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Open Historical Timeline ↗</a>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div>
+          <p class="eyebrow eyebrow--accent">Chronicle II · Digital Era</p>
+          <h3 class="panel__title">Digital Era Timeline</h3>
+          <p class="panel__body">Sensors, hot-mirror removal, full-spectrum conversions, IR-Chrome filtration, and post-film infrared aesthetics.</p>
+        </div>
+        <div>
+          <a class="btn btn--ghost" href="{{ config.extra.chronicle_digital_url }}" target="_blank" rel="noopener noreferrer">Open Digital Era Timeline ↗</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section rule-top" aria-labelledby="author-heading">
+  <div class="container split-header">
+    <div>
+      <p class="eyebrow">The Author</p>
+      <h2 id="author-heading" class="section-heading">
+        Infrared photographer.<br>Art historian.<br>Visual archaeologist.
+      </h2>
+    </div>
+    <div class="prose">
+      <p>
+        I’m an infrared photographer, art historian, and visual archaeologist who gave up on “professional photography” years ago. Between archaeological expeditions, museum documentation, and extended-spectrum fieldwork, the camera became an instrument for reading history and place beyond visible light.
+      </p>
+      <p>
+        For institutional, curatorial, editorial, or research inquiries, write directly or explore the Russian-language mirror on Wfolio.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--ghost" href="{{ get_url(path='about/') }}">Read full biography</a>
+        <a class="btn btn--ghost" href="{{ get_url(path='contacts/') }}">Contacts</a>
+        <a class="btn btn--ghost" href="{{ config.extra.russian_mirror_url }}" target="_blank" rel="noopener noreferrer">Russian Site (Wfolio) ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

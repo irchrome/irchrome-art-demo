@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} — {{ config.title }}{% endblock %}
+{% block description %}{{ section.description | default(value=config.description) }}{% endblock %}
+{% block og_title %}{{ section.title }} — {{ config.title }}{% endblock %}
+{% block og_description %}{{ section.description | default(value=config.description) }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{ section.title }}",
+  "description": "{{ section.description | default(value=config.description) }}",
+  "url": "{{ section.permalink | safe }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<header class="container page-header">
+  <p class="eyebrow">Archive · {{ section.pages | length }} Series</p>
+  <h1 class="page-header__title">{{ section.title }}</h1>
+  {% if section.description %}
+  <p class="page-header__lead">{{ section.description }}</p>
+  {% endif %}
+</header>
+
+<section class="container" aria-label="Series list">
+  <div class="archive-grid">
+    {% for item in section.pages %}
+    <article>
+      <a class="series-card" href="{{ item.permalink | safe }}">
+        {% if item.extra.cover %}
+        <div class="series-card__frame">
+          <picture>
+            <source
+              type="image/webp"
+              srcset="{{ get_url(path=item.extra.cover.webp_sm) }} 720w, {{ get_url(path=item.extra.cover.webp_md) }} 1200w"
+              sizes="(max-width: 767px) 92vw, 46vw">
+            <img
+              src="{{ get_url(path=item.extra.cover.src_lg) }}"
+              width="{{ item.extra.cover.width }}"
+              height="{{ item.extra.cover.height }}"
+              alt="{{ item.extra.cover.alt }}"
+              {% if loop.index == 1 %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              decoding="async">
+          </picture>
+        </div>
+        {% endif %}
+        <div class="series-card__head">
+          <h2 class="series-card__title">{{ item.title }}</h2>
+          {% if item.extra.plate_count %}
+          <span class="series-card__count">{{ item.extra.plate_count }} plates</span>
+          {% endif %}
+        </div>
+        {% if item.description %}
+        <p class="series-card__desc">{{ item.description }}</p>
+        {% endif %}
+        {% if item.extra.meta_line %}
+        <p class="series-card__meta">{{ item.extra.meta_line }}</p>
+        {% endif %}
+      </a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

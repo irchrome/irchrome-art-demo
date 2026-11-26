@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} — {{ config.title }}{% endblock %}
+{% block description %}{{ page.description | default(value=config.description) }}{% endblock %}
+{% block og_title %}{{ page.title }} — {{ config.title }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "{{ config.extra.author_name }}",
+  "url": "{{ page.permalink | safe }}",
+  "email": "mailto:{{ config.extra.contact_email }}",
+  "jobTitle": "{{ config.extra.author_role }}",
+  "homeLocation": {
+    "@type": "Place",
+    "name": "{{ config.extra.author_location }}"
+  },
+  "sameAs": [
+    "{{ config.extra.instagram_url }}",
+    "{{ config.extra.telegram_url }}",
+    "{{ config.extra.facebook_url }}",
+    "{{ config.extra.linkedin_url }}",
+    "{{ config.extra.russian_mirror_url }}"
+  ]
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<header class="container page-header">
+  <p class="eyebrow">About · {{ config.extra.author_name }}</p>
+  <h1 class="page-header__title">
+    Infrared photographer.<br>
+    Art historian.<br>
+    <span style="color: #e06d61;">Visual archaeologist.</span>
+  </h1>
+  {% if page.description %}
+  <p class="page-header__lead">{{ page.description }}</p>
+  {% endif %}
+</header>
+
+<section class="container" aria-label="Author profile summary">
+  <div class="facts-grid">
+    <div>
+      <p class="eyebrow">Public Location</p>
+      <p class="display facts-grid__val">{{ config.extra.author_location }}</p>
+    </div>
+    <div>
+      <p class="eyebrow">Extended-Spectrum Practice</p>
+      <p class="display facts-grid__val">Since 2017</p>
+    </div>
+    <div>
+      <p class="eyebrow">Languages</p>
+      <p class="display facts-grid__val">English · Russian</p>
+    </div>
+  </div>
+</section>
+
+<article class="container section">
+  <div class="prose">
+    {{ page.content | safe }}
+  </div>
+
+  <div class="series-nav">
+    <a class="btn btn--primary" href="{{ get_url(path='contacts/') }}">Contacts &amp; Inquiries</a>
+    <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+      <a class="btn btn--ghost" href="{{ get_url(path='research-archives/') }}">Research Archives</a>
+      <a class="btn btn--ghost" href="{{ config.extra.chronicle_historical_url }}" target="_blank" rel="noopener noreferrer">Infrared Chronicle ↗</a>
+    </div>
+  </div>
+</article>
+{% endblock %}

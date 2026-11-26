@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}404 — Page Not Found · {{ config.title }}{% endblock %}
+{% block description %}The requested URL could not be found on {{ config.title }}.{% endblock %}
+{% block canonical %}{% endblock %}
+
+{% block content %}
+<section class="container page-header" style="padding-block: 6rem;">
+  <p class="eyebrow eyebrow--accent">Error 404</p>
+  <h1 class="page-header__title">Page not found.</h1>
+  <p class="page-header__lead">
+    The requested address does not exist on this site. Continue to the Research Archives, Field Journal, or Home.
+  </p>
+  <div class="hero__actions">
+    <a class="btn btn--primary" href="{{ get_url(path='/') }}">Return Home</a>
+    <a class="btn btn--ghost" href="{{ get_url(path='research-archives/') }}">Research Archives</a>
+    <a class="btn btn--ghost" href="{{ get_url(path='contacts/') }}">Contacts</a>
+  </div>
+</section>
+{% endblock %}

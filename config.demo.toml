@@ -1,0 +1,36 @@
+base_url = "https://demo.irchrome.art"
+title = "IR & Chrome ART"
+description = "Infrared and IR-Chrome photography by Alexandr Korolev — research archives, essays, and extended-spectrum visual archaeology."
+default_language = "en"
+compile_sass = false
+build_search_index = false
+generate_feeds = false
+minify_html = false
+
+[markdown]
+smart_punctuation = false
+
+[extra]
+build_env = "demo"
+demo_banner = true
+robots_meta = "noindex,follow"
+robots_include_sitemap = false
+author_name = "Alexandr Korolev"
+author_short = "Aleksander"
+author_location = "Yerevan, Armenia"
+author_role = "Infrared photographer, art historian, and visual archaeologist"
+contact_email = "hello@irchrome.art"
+chronicle_historical_url = "https://chronicle.irchrome.art/"
+chronicle_digital_url = "https://chronicle.irchrome.art/digital-era/"
+russian_mirror_url = "https://ru.irchrome.art/"
+instagram_url = "https://instagram.com/irchromeart"
+telegram_url = "https://t.me/irchrome"
+facebook_url = "https://facebook.com/irchromeart"
+linkedin_url = "https://linkedin.com/in/irchrome"
+hero_image_webp_sm = "media/hero/hero-720.webp"
+hero_image_webp_md = "media/hero/hero-1200.webp"
+hero_image_lg = "media/hero/hero-1600.jpg"
+hero_image_w = 1600
+hero_image_h = 740
+hero_image_alt = "Extended-spectrum infrared landscape in IR-Chrome red and deep shadow tones"
+zola_version = "0.23.6"

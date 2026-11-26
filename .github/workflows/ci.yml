@@ -1,0 +1,47 @@
+name: CI — Zola Check & Build Verification
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      ZOLA_VERSION: "0.23.6"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install pinned Zola
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/getzola/zola/releases/download/v${ZOLA_VERSION}/zola-v${ZOLA_VERSION}-x86_64-unknown-linux-gnu.tar.gz" -o /tmp/zola.tar.gz
+          tar -xzf /tmp/zola.tar.gz -C /tmp
+          sudo mv /tmp/zola /usr/local/bin/zola
+          zola --version
+
+      - name: Run zola check
+        run: zola check
+
+      - name: Build demo (custom domain profile)
+        run: zola --config config.demo.toml build --output-dir public-demo
+
+      - name: Verify demo custom domain artifact
+        run: python3 scripts/verify_build.py --dir public-demo --base-url https://demo.irchrome.art --mode demo
+
+      - name: Build demo (github.io subpath fallback)
+        run: zola --config config.demo.toml build --base-url https://irchrome.github.io/irchrome-art-demo --output-dir public-subpath
+
+      - name: Verify demo subpath artifact
+        run: python3 scripts/verify_build.py --dir public-subpath --base-url https://irchrome.github.io/irchrome-art-demo --mode demo
+
+      - name: Build production profile (verification only, never deployed)
+        run: zola --config config.toml build --output-dir public-prod
+
+      - name: Verify production profile artifact
+        run: python3 scripts/verify_build.py --dir public-prod --base-url https://irchrome.art --mode production

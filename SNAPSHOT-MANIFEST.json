@@ -1,10 +1,10 @@
 {
   "source_repo": "irchrome/irchrome-art",
   "source_subdir": "site-zola",
-  "source_commit_sha": "62b2c94e43bda4f35f4f8303e61530e0d3a282f3",
+  "source_commit_sha": "8358e6b215e89662b85f4a482bd836836c28cafb",
   "source_dirty_at_export": false,
   "zola_version": "0.23.6",
-  "file_count": 580,
-  "total_mib": 159.03,
-  "snapshot_sha256": "309bffcd4f56f392fc3a7c0e6e612501a77fb12c846e6d0b277ae08120a43c20"
+  "file_count": 613,
+  "total_mib": 165.83,
+  "snapshot_sha256": "9bcc53551e061a64fa43577e43f3f764c5f83ec84b384f2e129181a4535ad2c8"
 }

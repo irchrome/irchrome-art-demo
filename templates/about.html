@@ -29,16 +29,39 @@
 {% endblock %}
 
 {% block content %}
-<header class="container page-header">
-  <p class="eyebrow">About · {{ config.extra.author_name }}</p>
-  <h1 class="page-header__title">
-    Infrared photographer.<br>
-    Art historian.<br>
-    <span style="color: #e06d61;">Visual archaeologist.</span>
-  </h1>
-  {% if page.description %}
-  <p class="page-header__lead">{{ page.description }}</p>
-  {% endif %}
+<header class="container page-header about-hero">
+  <div class="about-hero__text">
+    <p class="eyebrow">About · {{ config.extra.author_name }}</p>
+    <h1 class="page-header__title">
+      Infrared photographer.<br>
+      Art historian.<br>
+      <span style="color: #e06d61;">Visual archaeologist.</span>
+    </h1>
+    {% if page.description %}
+    <p class="page-header__lead">{{ page.description }}</p>
+    {% endif %}
+  </div>
+  <figure class="about-hero__media">
+    <a
+      class="about-figure__link"
+      href="{{ get_url(path='media/about/01-hero-portrait-1600.jpg') }}"
+      data-lightbox="about"
+      data-alt="Portrait of Alexandr Korolev measuring a plaster bust of David with a vernier caliper">
+      <picture>
+        <source
+          type="image/webp"
+          srcset="{{ get_url(path='media/about/01-hero-portrait-720.webp') }} 720w, {{ get_url(path='media/about/01-hero-portrait-1200.webp') }} 1200w"
+          sizes="(max-width: 859px) 82vw, 380px">
+        <img
+          src="{{ get_url(path='media/about/01-hero-portrait-1600.jpg') }}"
+          width="1084"
+          height="1600"
+          alt="Portrait of Alexandr Korolev measuring a plaster bust of David with a vernier caliper"
+          fetchpriority="high"
+          decoding="async">
+      </picture>
+    </a>
+  </figure>
 </header>
 
 <section class="container" aria-label="Author profile summary">
@@ -60,7 +83,54 @@
 
 <article class="container section">
   <div class="prose">
-    {{ page.content | safe }}
+    {% if page.extra.blocks %}
+      {% for blk in page.extra.blocks %}
+        {% if blk.type == "h2" %}
+          <h2>{{ blk.text }}</h2>
+        {% elif blk.type == "h3" %}
+          <h3>{{ blk.text }}</h3>
+        {% elif blk.type == "subtitle" %}
+          <p><em>{{ blk.text }}</em></p>
+        {% elif blk.type == "p" %}
+          <p>{{ blk.text }}</p>
+        {% elif blk.type == "quote" %}
+          <blockquote>
+            <p>{{ blk.text }}</p>
+            {% if blk.cite %}<p>{{ blk.cite }}</p>{% endif %}
+          </blockquote>
+        {% elif blk.type == "list" %}
+          <ul>
+            {% for item in blk.items %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        {% elif blk.type == "figure" %}
+          <figure class="about-figure{% if blk.portrait %} about-figure--portrait{% endif %}">
+            <a
+              class="about-figure__link"
+              href="{{ get_url(path=blk.src_lg) }}"
+              data-lightbox="about"
+              data-alt="{{ blk.alt }}">
+              <picture>
+                <source
+                  type="image/webp"
+                  srcset="{{ get_url(path=blk.webp_sm) }} 720w, {{ get_url(path=blk.webp_md) }} 1200w"
+                  sizes="{% if blk.portrait %}(max-width: 767px) 88vw, 480px{% else %}(max-width: 767px) 92vw, 720px{% endif %}">
+                <img
+                  src="{{ get_url(path=blk.src_lg) }}"
+                  width="{{ blk.width }}"
+                  height="{{ blk.height }}"
+                  alt="{{ blk.alt }}"
+                  loading="lazy"
+                  decoding="async">
+              </picture>
+            </a>
+          </figure>
+        {% endif %}
+      {% endfor %}
+    {% else %}
+      {{ page.content | safe }}
+    {% endif %}
   </div>
 
   <div class="series-nav">

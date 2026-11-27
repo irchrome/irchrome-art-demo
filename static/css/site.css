@@ -873,6 +873,59 @@ ol {
 
 /* ---- Profile & Contacts ---- */
 
+.about-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .about-hero {
+    grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 24rem);
+    gap: 3.5rem;
+  }
+}
+
+.about-hero__media {
+  margin: 0;
+  max-width: min(100%, 24rem);
+  width: 100%;
+}
+
+@media (min-width: 860px) {
+  .about-hero__media {
+    justify-self: end;
+  }
+}
+
+.about-figure {
+  margin: 2.25rem 0 2.5rem;
+}
+
+.about-figure--portrait {
+  max-width: 30rem;
+}
+
+.about-figure__link {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.about-figure__link img {
+  width: 100%;
+  height: auto;
+}
+
+.about-figure__caption {
+  margin-top: 0.65rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--muted-fg);
+}
+
 .facts-grid {
   display: grid;
   gap: 1.75rem;
